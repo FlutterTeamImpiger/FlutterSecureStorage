@@ -27,7 +27,7 @@ _storage.writeDouble(key: “key”, value: “value”);
 final double value = _storage.readDoubleNew(key: "key");
 
 // Clear value
-_storage.clear(key: "userName");
+_storage.clear(key: "key");
 
 // Clear All
  _storage.clearAll();

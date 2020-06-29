@@ -147,6 +147,39 @@ class _MyAppState extends State<MyApp> {
                   TextStyle(color: Colors.white),),color: Colors.blue,padding: EdgeInsets.all(1.0),
                 ),
               ),
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 15),
+                alignment: Alignment.center,
+                child: Text('Clear Methods',
+                    style:
+                    TextStyle(fontSize: 25, fontWeight: FontWeight.w500)),
+              ),
+              ButtonTheme(
+                minWidth: 300.0,
+                height: 44.0,
+                child: RaisedButton(
+                  onPressed: () {
+                    // Clear value
+                    _storage.clear(key: "userName");
+                  },
+                  child:
+                  Text("Clear",style:
+                  TextStyle(color: Colors.white),),color: Colors.blue,padding: EdgeInsets.all(1.0),
+                ),
+              ),
+              ButtonTheme(
+                minWidth: 300.0,
+                height: 44.0,
+                child: RaisedButton(
+                  onPressed: () {
+                    // Clear All
+                    _storage.clearAll();
+                  },
+                  child:
+                  Text("ClearAll",style:
+                  TextStyle(color: Colors.white),),color: Colors.blue,padding: EdgeInsets.all(1.0),
+                ),
+              ),
             ],
           ),
         ),

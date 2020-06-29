@@ -74,4 +74,25 @@ class StoreCriticalData {
     print(value);
     return value;
   }
+
+  /// Clear function
+  Future<bool> clear({@required String key}) async {
+    final bool value = await _channel.invokeMethod(
+        'clear', <String, dynamic>{
+      'key': key,
+    });
+    print(value);
+    return value;
+  }
+
+  /// ClearAll function
+  Future<bool> clearAll() async {
+    final bool value = await _channel.invokeMethod(
+        'clear_all', <String, dynamic>{
+      'key': "Delete",
+    });
+    print(value);
+    return value;
+  }
+
 }

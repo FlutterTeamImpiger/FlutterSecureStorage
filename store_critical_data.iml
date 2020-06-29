@@ -14,6 +14,9 @@
       <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/store_critical_data/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/store_critical_data/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/store_critical_data/build" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/store_critical_data/example/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/store_critical_data/example/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/store_critical_data/example/build" />
       <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/store_critical_data/example/build/app/intermediates/flutter/debug/flutter_assets/packages" />
       <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/store_critical_data/example/build/app/intermediates/merged_assets/debug/out/flutter_assets/packages" />
       <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/store_critical_data/example/build/flutter_assets/packages" />

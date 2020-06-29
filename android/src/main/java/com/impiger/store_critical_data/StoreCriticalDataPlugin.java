@@ -21,7 +21,10 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 
-/** StoreCriticalDataPlugin */
+/**
+ * StoreCriticalDataPlugin Class
+ * Store the primitive type data.
+ */
 public class StoreCriticalDataPlugin implements FlutterPlugin, MethodCallHandler {
 
   private MethodChannel channel;
@@ -35,11 +38,13 @@ public class StoreCriticalDataPlugin implements FlutterPlugin, MethodCallHandler
   // Necessary for deferred initialization of storageCipher.
   private static Context applicationContext;
 
+  /// Register the Method Channel for native invoke method
   public static void registerWith(Registrar registrar) {
     StoreCriticalDataPlugin instance = new StoreCriticalDataPlugin();
     instance.initInstance(registrar.messenger(), registrar.context());
   }
 
+  /// Set Methodcall Handle for Invoke call
   public void initInstance(BinaryMessenger messenger, Context context) {
     try {
       applicationContext = context.getApplicationContext();
@@ -61,6 +66,7 @@ public class StoreCriticalDataPlugin implements FlutterPlugin, MethodCallHandler
    * The most convenient place for that appears to be onMethodCall().
    */
 
+  /// Initializing StorageCipher for storage
   private void ensureInitStorageCipher() {
     // Check to avoid unnecessary entry into the synchronized block.
     if (storageCipher == null) {
@@ -95,13 +101,8 @@ public class StoreCriticalDataPlugin implements FlutterPlugin, MethodCallHandler
     new Thread(new MethodRunner(call, resultRaw)).start();
   }
 
-  private String getKeyFromCall(MethodCall call) {
-    Map arguments = (Map) call.arguments;
-    String rawKey = (String) arguments.get("key");
-    String key = addPrefixToKey(rawKey);
-    return key;
-  }
-  private String addPrefixToKey(String key) {
+  private String addPrefixToKey(String key)
+  {
     return ELEMENT_PREFERENCES_KEY_PREFIX + "_" + key;
   }
 
@@ -163,9 +164,9 @@ public class StoreCriticalDataPlugin implements FlutterPlugin, MethodCallHandler
     public void run() {
       try {
         ensureInitStorageCipher();
-        switch (call.method) {
+        String key = getKeyFromCall(call);
+          switch (call.method) {
           case "write_string": {
-            String key = getKeyFromCall(call);
             Map arguments = (Map) call.arguments;
             String value = (String) arguments.get("value");
             write(key, value);
@@ -173,13 +174,11 @@ public class StoreCriticalDataPlugin implements FlutterPlugin, MethodCallHandler
             break;
           }
           case "read_string": {
-            String key = getKeyFromCall(call);
             String value = read(key);
             result.success(value);
             break;
           }
           case "write_boolean": {
-            String key = getKeyFromCall(call);
             Map arguments = (Map) call.arguments;
             String value = arguments.get("value").toString();
             write(key, value);
@@ -187,13 +186,11 @@ public class StoreCriticalDataPlugin implements FlutterPlugin, MethodCallHandler
             break;
           }
           case "read_boolean": {
-            String key = getKeyFromCall(call);
             String value = read(key);
             result.success(Boolean.valueOf(value));
             break;
           }
           case "write_int": {
-            String key = getKeyFromCall(call);
             Map arguments = (Map) call.arguments;
             String value = arguments.get("value").toString();
             write(key, value);
@@ -201,13 +198,11 @@ public class StoreCriticalDataPlugin implements FlutterPlugin, MethodCallHandler
             break;
           }
           case "read_int": {
-            String key = getKeyFromCall(call);
             String value = read(key);
             result.success(Integer.valueOf(value));
             break;
           }
           case "write_double": {
-            String key = getKeyFromCall(call);
             Map arguments = (Map) call.arguments;
             String value = arguments.get("value").toString();
             write(key, value);
@@ -215,11 +210,20 @@ public class StoreCriticalDataPlugin implements FlutterPlugin, MethodCallHandler
             break;
           }
           case "read_double": {
-            String key = getKeyFromCall(call);
             String value = read(key);
             result.success(Double.valueOf(value));
             break;
           }
+          case "clear_all": {
+            boolean isDone = clearAll();
+            result.success(isDone);
+            break;
+            }
+          case "clear": {
+            boolean isDone = clear(key);
+            result.success(isDone);
+            break;
+            }
           default:
             result.notImplemented();
             break;
@@ -233,24 +237,49 @@ public class StoreCriticalDataPlugin implements FlutterPlugin, MethodCallHandler
     }
   }
 
-  private void write(String key, String value) throws Exception {
-    byte[] result = storageCipher.encrypt(value.getBytes(charset));
-    SharedPreferences.Editor editor = preferences.edit();
-    editor.putString(key, Base64.encodeToString(result, 0));
-    editor.commit();
-  }
-
-  private String read(String key) throws Exception {
-    String encoded = preferences.getString(key, null);
-    return decodeRawValue(encoded);
-  }
-
-  private String decodeRawValue(String value) throws Exception {
-    if (value == null) {
-      return null;
+    /// Get Key Value
+    private String getKeyFromCall(MethodCall call) {
+      Map arguments = (Map) call.arguments;
+      String rawKey = (String) arguments.get("key");
+      String key = addPrefixToKey(rawKey);
+      return key;
     }
-    byte[] data = Base64.decode(value, 0);
-    byte[] result = storageCipher.decrypt(data);
-    return new String(result, charset);
+
+    /// Write value to SharedPreferences
+    private void write(String key, String value) throws Exception {
+      byte[] result = storageCipher.encrypt(value.getBytes(charset));
+      SharedPreferences.Editor editor = preferences.edit();
+      editor.putString(key, Base64.encodeToString(result, 0));
+      editor.commit();
   }
+    /// Load value from SharedPreferences
+    private String read(String key) throws Exception {
+      String encoded = preferences.getString(key, null);
+      return decodeRawValue(encoded);
+    }
+
+    /// Clear specific item
+    private boolean clear(String key){
+      SharedPreferences.Editor editor = preferences.edit();
+      editor.remove(key);
+      return editor.commit();
+  }
+
+    /// Clear all item
+    private boolean clearAll(){
+      SharedPreferences.Editor editor = preferences.edit();
+      editor.clear();
+      return editor.commit();
+    }
+
+    /// Convert decode the value
+    private String decodeRawValue(String value) throws Exception {
+
+      if (value == null) {
+          return null;
+      }
+      byte[] data = Base64.decode(value, 0);
+      byte[] result = storageCipher.decrypt(data);
+      return new String(result, charset);
+   }
 }

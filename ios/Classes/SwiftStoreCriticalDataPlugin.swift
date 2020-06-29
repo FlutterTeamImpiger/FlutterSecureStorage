@@ -26,6 +26,7 @@ public class SwiftStoreCriticalDataPlugin: NSObject, FlutterPlugin {
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
 
+print(call.method)
     let arguments =  call.arguments
             let params = arguments as?[String: Any]
             if params != nil{
@@ -79,6 +80,16 @@ public class SwiftStoreCriticalDataPlugin: NSObject, FlutterPlugin {
                             result(doubleValue)
                         }
                     }
+                    else if (call.method == "clear"){
+                       if let resultValue = clear(key: key as NSString){
+                             result(resultValue)
+                        }
+                    }
+                    else if (call.method == "clear_all"){
+                        if let resultValue = clearAll(){
+                             result(resultValue)
+                        }
+                    }
                 }
             }
   }
@@ -122,4 +133,24 @@ public class SwiftStoreCriticalDataPlugin: NSObject, FlutterPlugin {
           }
           return contentsOfKeychain
       }
+
+    /// Clear specific item
+    func clear(key: NSString) -> Bool? {
+
+        // Instantiate a keychain query
+        let keychainQuery: NSMutableDictionary = NSMutableDictionary(objects: [kSecClassGenericPasswordValue, key, userAccount], forKeys: [kSecClassValue, kSecAttrServiceValue, kSecAttrAccountValue])
+        // Delete items
+        SecItemDelete(keychainQuery as CFDictionary)
+        return true
+    }
+
+    /// Clear all item
+    func clearAll() -> Bool? {
+
+        // Instantiate a keychain query
+        let keychainQuery: NSMutableDictionary = NSMutableDictionary(objects: [kSecClassGenericPasswordValue, userAccount], forKeys: [kSecClassValue, kSecAttrAccountValue])
+        // Delete all items
+        SecItemDelete(keychainQuery as CFDictionary)
+        return true
+    }
 }

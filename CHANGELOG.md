@@ -10,3 +10,7 @@
 ## 0.1.3
 
 * Updated documentation for Android and iOS  libraries, classes, functions, and other API elements
+
+## 0.1.4
+
+* Added clear and clear All functionality.

@@ -32,7 +32,7 @@ _storage.clear(key: "key");
 // Clear All
  _storage.clearAll();
 
- // Check if Key was store
+// Check if Key was store
  _storage.contains(key: "key");
 
 

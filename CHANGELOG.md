@@ -14,3 +14,7 @@
 ## 0.1.4
 
 * Added clear and clear All functionality.
+
+## 0.1.5
+
+* Added function for check if a key was the store.

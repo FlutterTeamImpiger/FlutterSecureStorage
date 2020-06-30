@@ -90,6 +90,11 @@ print(call.method)
                              result(resultValue)
                         }
                     }
+                    else if (call.method == "contains"){
+
+                        let isResult = self.checking(service: key as NSString)
+                         result(isResult)
+                       }
                 }
             }
   }
@@ -153,4 +158,16 @@ print(call.method)
         SecItemDelete(keychainQuery as CFDictionary)
         return true
     }
+
+    /// Check if Key was store
+    func checking(service: NSString) -> Bool? {
+        var result = false
+        let keychainQuery: NSMutableDictionary = NSMutableDictionary(objects: [kSecClassGenericPasswordValue, service, userAccount, kCFBooleanTrue!, kSecMatchLimitOneValue], forKeys: [kSecClassValue, kSecAttrServiceValue, kSecAttrAccountValue, kSecReturnDataValue, kSecMatchLimitValue])
+        var item: CFTypeRef?
+        let status = SecItemCopyMatching(keychainQuery as CFDictionary, &item)
+        if status == errSecSuccess {
+           result = true
+        }
+        return result
+        }
 }

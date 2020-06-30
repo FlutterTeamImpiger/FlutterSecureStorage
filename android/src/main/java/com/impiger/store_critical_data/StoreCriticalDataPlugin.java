@@ -224,6 +224,10 @@ public class StoreCriticalDataPlugin implements FlutterPlugin, MethodCallHandler
             result.success(isDone);
             break;
             }
+          case "contains": {
+            result.success(containsKey(getKeyFromCall(call)));
+            break;
+            }
           default:
             result.notImplemented();
             break;
@@ -270,6 +274,11 @@ public class StoreCriticalDataPlugin implements FlutterPlugin, MethodCallHandler
       SharedPreferences.Editor editor = preferences.edit();
       editor.clear();
       return editor.commit();
+    }
+
+    /// Check if Key was store
+    private boolean containsKey(String key){
+      return preferences.contains(key);
     }
 
     /// Convert decode the value

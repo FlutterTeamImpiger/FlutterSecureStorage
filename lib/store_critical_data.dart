@@ -94,5 +94,14 @@ class StoreCriticalData {
     print(value);
     return value;
   }
+  /// Check if Key was store function
+  Future<bool> contains({@required String key}) async {
+    final bool value = await _channel.invokeMethod(
+        'contains', <String, dynamic>{
+      'key': key,
+    });
+    print(value);
+    return value;
+  }
 
 }

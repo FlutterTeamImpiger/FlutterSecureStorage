@@ -25,7 +25,7 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Impiger Secure Stroage Plugin'),
         ),
-        body: Center(
+        body: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
@@ -177,6 +177,26 @@ class _MyAppState extends State<MyApp> {
                   },
                   child:
                   Text("ClearAll",style:
+                  TextStyle(color: Colors.white),),color: Colors.blue,padding: EdgeInsets.all(1.0),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 15),
+                alignment: Alignment.center,
+                child: Text('Check if Key was store',
+                    style:
+                    TextStyle(fontSize: 25, fontWeight: FontWeight.w500)),
+              ),
+              ButtonTheme(
+                minWidth: 300.0,
+                height: 44.0,
+                child: RaisedButton(
+                  onPressed: () {
+                    // Check if Key was store
+                    _storage.contains(key: "userName");
+                  },
+                  child:
+                  Text("Contains",style:
                   TextStyle(color: Colors.white),),color: Colors.blue,padding: EdgeInsets.all(1.0),
                 ),
               ),
